@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration 
+	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" 
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<context id="context1" targetRuntime="MyBatis3">
+
+		<!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号；-->
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+		<!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表； 一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖 -->
+		<property name="autoDelimitKeywords" value="true" />
+
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin" />
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<plugin type="com.yu.study.common.mybatis.plugin.MybatisPaginationPlugin" />
+
+		<!-- 配置连接数据信息 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://192.168.137.2:3306/study?characterEncoding=utf8"
+			userId="root" password="root">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- 生成持久化对象 -->
+		<javaModelGenerator targetPackage="com.yu.study.dao.po"
+			targetProject="../study-dao/src/main/java" />
+
+		<!-- 生成sql -->
+		<sqlMapGenerator targetPackage="com.yu.study.dao.mapper"
+			targetProject="src/main/resources" />
+
+		<!-- 生成接口 -->
+		<javaClientGenerator targetPackage="com.yu.study.dao.mapper"
+			targetProject="../study-dao/src/main/java" type="XMLMAPPER" />
+
+		<!-- *********************数据表映射配置*********************** -->
+		<table tableName="user" domainObjectName="UserPo">
+		</table> 
+		<table tableName="platform_order" domainObjectName="OrderPo">
+		</table>
+		<table tableName="order_goods" domainObjectName="OrderGoodsPo">
+		</table> 
+		<table tableName="file_info" domainObjectName="FileInfoPo">
+		</table>
+		<table tableName="file_info_relate" domainObjectName="FileInfoRelatePo">
+		</table>
+		<table tableName="order_address" domainObjectName="OrderAddressPo">
+		</table>
+		
+		<table tableName="order_attach_info" domainObjectName="OrderAttachInfoPo">
+		</table>
+		<table tableName="order_log" domainObjectName="OrderLogPo">
+		</table>
+		<table tableName="order_policy" domainObjectName="OrderPolicyPo">
+		</table>
+		<table tableName="order_refund" domainObjectName="OrderRefundPo">
+		</table>
+
+		
+		
+	</context>
+</generatorConfiguration>

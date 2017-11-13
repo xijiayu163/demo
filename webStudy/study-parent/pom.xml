@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.yu</groupId>
+		<artifactId>yu-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>study-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<study.version>0.0.1-SNAPSHOT</study.version>
+		<yu.util.version>0.0.1-SNAPSHOT</yu.util.version>
+	</properties>
+
+	<modules>
+		<module>../study-service</module>
+		<module>../study-service-impl</module>
+		<module>../study-dao</module>
+		<module>../study-dao-impl</module>
+		<module>../study-web</module>
+		<module>../study-common</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>yu-util</artifactId>
+				<version>${yu.util.version}</version>
+			</dependency>
+			<!-- 项目依赖包 -->
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-service</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-service-impl</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-dao</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-dao-impl</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-common</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<finalName>study-parent</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
