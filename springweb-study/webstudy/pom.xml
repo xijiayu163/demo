@@ -1,0 +1,204 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.yu</groupId>
+	<artifactId>webstudy</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>webstudy Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<parent>
+		<groupId>com.yino</groupId>
+		<artifactId>yino-parent</artifactId>
+		<version>1.1.0</version>
+	</parent>
+
+	<properties>
+		<activemq.version>5.11.1</activemq.version>
+		<fastjson.version>1.2.24</fastjson.version>
+		<jdom.version>2.0.5</jdom.version>
+		<yino.util.version>1.0.3-SNAPSHOT</yino.util.version>
+		<drudgery.version>1.0.0-SNAPSHOT</drudgery.version>
+		<support.version>1.4.0</support.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>${activemq.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-pool</artifactId>
+			<version>${activemq.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>yino-util</artifactId>
+			<version>${yino.util.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom2</artifactId>
+			<version>${jdom.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>support-web-common</artifactId>
+			<version>${support.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>support-base</artifactId>
+			<version>${support.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>support-dao-common</artifactId>
+			<version>${support.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>support-service-common</artifactId>
+			<version>${support.version}</version>
+		</dependency>
+
+		<!-- drudgery -->
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-base</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-config-service</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-config-service-impl</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-service</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-mq</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-service-impl</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-dao-impl</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-plugin</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-plugin-third</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yino</groupId>
+			<artifactId>drudgery-dao</artifactId>
+			<version>${drudgery.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId> spring-security-taglibs</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.yu</groupId>
+			<artifactId>libconfigtest</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>webstudy</finalName>
+	</build>
+</project>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd"
+    default-lazy-init="false">
+    <!-- 采用注释的方式配置bean -->
+	<context:annotation-config />
+    <mvc:annotation-driven />
+    
+     <!-- 测试引入xml -->
+    <!-- <import resource="classpath:HandlerInterceptorconfig.xml" /> -->
+    <import resource="classpath:controlleradvice.xml" />
+<!--     <import resource="classpath:responsestatus.xml" /> -->
+    
+    
+    <!-- 扫描Controller -->
+    <context:component-scan base-package="com.yu.webstudy.**.controller" />
+
+    <!-- 拦截以下资源使用默认的资源处理器ResourceHttpRequestHandler -->
+    <mvc:resources location="/download/" mapping="/download/**"></mvc:resources>
+    <mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+    <mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+    <mvc:resources location="/*.html" mapping="/*.html"></mvc:resources>
+    <mvc:resources location="/datagrid_data1.json" mapping="/datagrid_data1.json"></mvc:resources>
+    <mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+    
+    <!-- 为视图模型添加前缀后缀 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- aspectJ代理 -->
+	<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+  
+</beans>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd"
+	default-lazy-init="false">
+	<!-- 采用注释的方式配置bean -->
+	<context:annotation-config />
+	<mvc:annotation-driven />
+
+	<!-- 配置统计拦截器 -->
+<!-- 	<mvc:interceptors> -->
+		<!-- 常规拦截器测试 -->
+<!-- 		<mvc:interceptor> <mvc:mapping path="/**" /> <bean class="com.yu.webstudy.interceptor.handler.NormalHandlerInterceptorTest.NormalHandlerInterceptorTest1" 
+			/> </mvc:interceptor>
+		<mvc:interceptor> <mvc:mapping path="/**" /> <bean class="com.yu.webstudy.interceptor.handler.NormalHandlerInterceptorTest.NormalHandlerInterceptorTest2" 
+			/> </mvc:interceptor>
+		<mvc:interceptor> <mvc:mapping path="/**" /> <bean class="com.yu.webstudy.interceptor.handler.NormalHandlerInterceptorTest.NormalHandlerInterceptorTest3" 
+			/> </mvc:interceptor> -->
+		<!-- 异步拦截器测试 -->
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean
+				class="com.yu.webstudy.interceptor.handler.AsyncHandlerInterceptorTest" />
+		</mvc:interceptor> -->
+		<!-- 时间性能监控拦截器测试 -->
+<!-- 		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean
+				class="com.yu.webstudy.interceptor.handler.StopWatchHandlerInterceptor" />
+		</mvc:interceptor> -->
+		<!-- basic auth 拦截器 -->
+<!-- 		<mvc:interceptor> <mvc:mapping path="/**"/> <bean class="com.yu.webstudy.interceptor.handler.BasicAuthHandlerInterceptorTest" 
+			/> </mvc:interceptor> -->
+		<!-- 请求参数日志拦截器测试，无法获取@responseBody里的数据，应用Filter来替换 -->
+<!-- 		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean
+				class="com.yu.webstudy.interceptor.handler.LogRequestHandlerInterceptor" />
+		</mvc:interceptor> -->
+
+<!-- 	</mvc:interceptors> -->
+</beans>
