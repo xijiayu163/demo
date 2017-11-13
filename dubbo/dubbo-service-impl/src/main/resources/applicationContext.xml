@@ -15,10 +15,7 @@
     http://www.springframework.org/schema/util 
     http://www.springframework.org/schema/util/spring-util-3.2.xsd" 
 	default-lazy-init="false">
-	<!-- 激活annotation功能 -->
-	<context:annotation-config />
-	<context:component-scan base-package="com.yu.dubbo.service.impl" />
 	
-	<import resource="classpath:META-INF/spring/applicationContext-config.xml" />
+	<context:component-scan base-package="com.yu.dubbo.service.impl" />
 	
 </beans>

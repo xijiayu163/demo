@@ -17,5 +17,6 @@ public class Provider {
 
 	public static void main(String[] args) throws Exception {
 		com.alibaba.dubbo.container.Main.main(args);
+		System.out.println("ok");
 	}
 }

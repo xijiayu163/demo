@@ -14,7 +14,7 @@
 			<artifactId>dubbo-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- 日志相关jar包 -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -42,17 +42,27 @@
 			<artifactId>spring-core</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.yu</groupId>
 			<artifactId>dubbo-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.sgroschupf</groupId>
+			<artifactId>zkclient</artifactId>
+		</dependency>
+
+
 	</dependencies>
 </project>

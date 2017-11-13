@@ -10,11 +10,11 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.2.xsd ">
   
-    <dubbo:application name="support-service-content" owner="xj" organization="yu"/>
+    <dubbo:application name="support-service-content" />  <!-- owner="xj" organization="yu" -->
     <dubbo:provider protocol="dubbo" timeout="${dubbo.provider.timeout}" retries="0"></dubbo:provider>  
-    <dubbo:registry address="zookeeper://${dubbo.registry.server}" timeout="20000"></dubbo:registry>   
+    <dubbo:registry address="zookeeper://${dubbo.registry.server}" timeout="150000"></dubbo:registry>   
     <dubbo:protocol name="dubbo" port="${dubbo.provider.listen.port}" serialization="json" />
-	<dubbo:annotation package="com.yino.support.content.service.impl" />
+	<dubbo:annotation package="com.yu.dubbo.service.impl" />
 	<dubbo:monitor protocol="registry"></dubbo:monitor>
 	
 	<import resource="classpath*:applicationContext.xml" />
