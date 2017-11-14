@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xmlns:context="http://www.springframework.org/schema/context"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd ">
+  
+  	<!-- 设置该服务的应用程序名等相关属性 -->
+    <dubbo:application name="support-service-content" owner="xj" organization="yu"/>
+    
+    <!-- 指定dubbo服务提供者使用的传输协议 和超时时间,retries为0表示不重复连接,默认值为2-->
+    <dubbo:provider protocol="dubbo" timeout="${dubbo.provider.timeout}" retries="0"></dubbo:provider> 
+    
+    <!-- 指定注册的服务器地址和注册超时时间，默认为5秒 --> 
+    <dubbo:registry address="zookeeper://${dubbo.registry.server}" timeout="150000"></dubbo:registry>   
+    
+    <!-- 指定dubbo传输协议及端口 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.provider.listen.port}" serialization="json" />
+    
+    <!-- dubbo扫描指定包下的注解 -->
+	<dubbo:annotation package="com.yu.dubbo.service.impl" />
+	
+	<!-- 监控中心配,registry表示从注册中心发现监控中心地址，否则直连监控中心。 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+</beans>

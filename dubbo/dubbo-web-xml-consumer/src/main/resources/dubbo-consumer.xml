@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 服务方应用程序名等相关属性 -->
+	<dubbo:application name="annotation-consumer" />
+	
+	<!-- 订阅服务时的订阅服务器地址及协议,超时时间 -->
+	<dubbo:registry address="zookeeper://192.168.8.88:2181" timeout="150000"></dubbo:registry>
+	
+	<!-- 生成远程服务代理，可以和本地bean一样使用demoService 消费者推荐使用xml统一配置,在代码使用方面统一使用autowired而不时service-->
+	<dubbo:reference id="userService11" interface="com.yu.dubbo.service.UserService" />
+	<dubbo:reference id="studentService111" interface="com.yu.dubbo.service.StudentService" />
+	
+	<!-- group分组测试 -->
+	<!-- 调用group1下的标识为groupService1的服务,id可随意设置，不一定要和提供者的ref的值一样,这里故意设置不一样,根据group名字从注册中心查找匹配的服务-->
+	<dubbo:reference id="myGroupService1" interface="com.yu.dubbo.group.service.GroupService" group="group1"/>
+	<!-- 调用group2下的标识为groupService2的服务 -->
+	<dubbo:reference id="myGroupService2" interface="com.yu.dubbo.group.service.GroupService" group="group2"/>
+	<!-- 随机调用标识为groupService2的服务 -->
+	<dubbo:reference id="myGroupService3" interface="com.yu.dubbo.group.service.GroupService" group="*"/>
+	
+	<!-- stub测试 -->
+	<dubbo:reference id="subservice" interface="com.yu.dubbo.stub.service.StubService"/>
+	
+	<!-- token测试 -->
+	<dubbo:reference id="tokenservice" interface="com.yu.dubbo.token.service.TokenService"/>
+	
+</beans>  

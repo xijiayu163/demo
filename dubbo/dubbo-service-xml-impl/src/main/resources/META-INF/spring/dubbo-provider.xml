@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xmlns:context="http://www.springframework.org/schema/context"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd ">
+  
+  	<!-- 设置该服务的应用程序名等相关属性 -->
+    <dubbo:application name="support-service-content" owner="xj" organization="yu"/>
+    
+    <!-- 指定dubbo服务提供者使用的传输协议 和超时时间,retries为0表示不重复连接,默认值为2-->
+    <dubbo:provider id="provider1" protocol="dubbo" timeout="${dubbo.provider.timeout}" retries="0"></dubbo:provider> 
+    
+    <!-- 指定注册的服务器地址和注册超时时间，默认为5秒 --> 
+    <dubbo:registry address="zookeeper://${dubbo.registry.server}" timeout="150000"></dubbo:registry>   
+    
+    <!-- 指定dubbo传输协议及端口,threads为线程池大小 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.provider.listen.port}" serialization="json" threads="200" />
+	
+	<!-- 监控中心配,registry表示从注册中心发现监控中心地址，否则直连监控中心。 -->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+	
+	<!-- 如下是和注解配置不一致的地方 -->
+	
+	<!-- 声明暴露的服务 ref指向下面定义的接口实现bean -->
+	<!-- <dubbo:service interface="com.yu.dubbo.service.UserService" ref="userService" /> -->
+	<!-- accesslog测试 设为true，将向logger中输出访问日志，也可填写访问日志文件路径，直接把访问日志输出到指定文件 -->
+	<!-- executes 每个服务或者每个方法的最大并发执行数为50,当到达上限后，新调用可能会等待至超时 -->
+	<dubbo:service interface="com.yu.dubbo.service.UserService" ref="userService" accesslog="true" executes="50"/>
+	<!-- 接口实现bean -->
+	<bean id="userService" class="com.yu.dubbo.service.impl.UserServiceImpl" />
+	
+	<!-- filter测试 拦截器 ip黑白名单拦截，日志记录等等,dubbo默认提供了多种拦截器 -->
+	<dubbo:service interface="com.yu.dubbo.service.StudentService" ref="studentService" filter="authorityFilter"/>
+	<!-- 接口实现bean -->
+	<bean id="studentService" class="com.yu.dubbo.service.impl.StudentServiceImpl" />
+	
+	<!-- 服务分组功能测试 -->
+	<dubbo:service interface="com.yu.dubbo.group.service.GroupService" ref="groupService1" group="group1"/>
+	<dubbo:service interface="com.yu.dubbo.group.service.GroupService" ref="groupService2" group="group2"/>
+	<!-- 接口实现bean -->
+	<bean id="groupService1" class="com.yu.dubbo.group.service.impl.GroupServiceImpl1" />
+	<bean id="groupService2" class="com.yu.dubbo.group.service.impl.GroupServiceImpl2" />
+	
+	<!-- stub测试  不完全验证,需要在服务端有该定义的实现类，且在客户端也有该实现类，最终生效的是客户端实现类，服务端的实现类存根并不生效,存根总是会执行,与mock不同,mock只在异常时执行-->
+	<dubbo:service interface="com.yu.dubbo.stub.service.StubService" ref="stubService" stub="com.yu.dubbo.stub.service.impl.StubServiceStub"/>
+	<!-- 接口实现bean -->
+	<bean id="stubService" class="com.yu.dubbo.stub.service.impl.StubServiceImpl" />
+	
+	<!-- token测试  防止消费者绕过注册中心访问提供者，在注册中心控制权限，以决定要不要下发令牌给消费者，注册中心可灵活改变授权方式，而不需修改或升级提供者 -->
+	<!--随机token令牌，使用UUID生成-->
+	<dubbo:service interface="com.yu.dubbo.token.service.TokenService" ref="tokenService" token="123456"/>
+	<bean id="tokenService" class="com.yu.dubbo.token.service.impl.TokenServiceImpl" />
+	
+	
+	
+</beans>

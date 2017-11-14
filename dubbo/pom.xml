@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>dubbo</artifactId>
-  <packaging>pom</packaging>
-  
-  <parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>dubbo</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
 		<groupId>com.yu</groupId>
 		<artifactId>yu-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-  
-  <modules>
-  	<module>dubbo-service</module>
-  	<module>dubbo-service-impl</module>
-  	<module>dubbo-consumer</module>
-    <module>dubbo-web-consumer</module>
-  </modules>
+
+	<modules>
+		<module>dubbo-service</module>
+		<module>dubbo-service-annotation-impl</module>
+		<module>dubbo-service-xml-impl</module>
+		<module>dubbo-web-annotation-consumer</module>
+		<module>dubbo-web-xml-consumer</module>
+	</modules>
+
+	<properties>
+		<study.version>0.0.1-SNAPSHOT</study.version>
+		<yu.util.version>0.0.1-SNAPSHOT</yu.util.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.yu</groupId>
+				<artifactId>study-common</artifactId>
+				<version>${study.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
