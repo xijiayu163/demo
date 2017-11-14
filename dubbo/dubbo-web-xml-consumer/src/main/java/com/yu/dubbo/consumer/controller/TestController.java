@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.dubbo.rpc.service.GenericService;
 import com.yu.dubbo.consumer.localservice.LocalStudentService;
 import com.yu.dubbo.entity.Student;
 import com.yu.dubbo.entity.User;
@@ -29,6 +30,8 @@ public class TestController {
 	private StubService stubService;
 	@Autowired
 	private TokenService tokenService;
+	@Autowired
+	private GenericService genericService;
 	
 	@RequestMapping(value="/user",method = RequestMethod.GET)
 	@ResponseBody
@@ -76,5 +79,14 @@ public class TestController {
 	public User testToken(){
 		User user = tokenService.getUser("xxx");
 		return user;
+	}
+	
+	@RequestMapping(value="/generic",method = RequestMethod.GET)
+	@ResponseBody
+	public String testGeneric(){
+		// 基本类型以及Date,List,Map等不需要转换，直接调用  
+		Object result = genericService.$invoke("getUser", new String[] { "java.lang.String" }, new Object[] { "2" });
+		// 如果返回POJO将自动转成Map   
+		return result.toString();  
 	}
 }

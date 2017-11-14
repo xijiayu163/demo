@@ -13,7 +13,7 @@
 	<dubbo:registry address="zookeeper://192.168.8.88:2181" timeout="150000"></dubbo:registry>
 	
 	<!-- 生成远程服务代理，可以和本地bean一样使用demoService 消费者推荐使用xml统一配置,在代码使用方面统一使用autowired而不时service-->
-	<dubbo:reference id="userService11" interface="com.yu.dubbo.service.UserService" />
+	<!-- <dubbo:reference id="userService11" interface="com.yu.dubbo.service.UserService" /> -->
 	<dubbo:reference id="studentService111" interface="com.yu.dubbo.service.StudentService" />
 	
 	<!-- group分组测试 -->
@@ -29,5 +29,24 @@
 	
 	<!-- token测试 -->
 	<dubbo:reference id="tokenservice" interface="com.yu.dubbo.token.service.TokenService"/>
+	
+	<!-- generic 泛化 用于测试，返回通用的数据,如果是pojo返回map,可以在客户端没有API接口及模型类元的情况下远程调用服务,但前提是provider有暴露服务-->
+	<dubbo:reference  id="genericService" interface="com.yu.dubbo.token.service.TokenService" generic="true" />
+	
+	<!-- url 点对点直连，一般测试时使用，注释上面userService11时测试 -->
+	<dubbo:reference id="userService11" interface="com.yu.dubbo.service.UserService" url="dubbo://localhost:20880"/>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 </beans>  
