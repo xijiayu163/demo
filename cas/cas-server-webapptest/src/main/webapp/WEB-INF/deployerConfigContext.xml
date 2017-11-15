@@ -61,7 +61,8 @@
                    | set its name to something other than its default name (typically the simple class name).
                    -->
                 <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
-                <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" />
+                <!-- <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" /> -->
+                <entry key-ref="customAuthenticationHandler" value-ref="primaryPrincipalResolver" />
             </map>
         </constructor-arg>
 
@@ -111,6 +112,10 @@
                 <entry key="casuser" value="Mellon"/>
             </map>
         </property>
+    </bean>
+    
+    <bean id="customAuthenticationHandler"
+          class="com.yu.cas.authentication.UserNameAuthenticationHandler">
     </bean>
 
     <!-- Required for proxy ticket mechanism -->
