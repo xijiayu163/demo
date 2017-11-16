@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+ http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+	
+	
+	
+	<var name="mycart" class="com.yu.webflow.entity.Cart" />
+	<on-start>
+		<set name="conversationScope.cart" value="mycart"></set>
+	</on-start>
+	<view-state id="viewCart" view="viewCart">
+		<!-- viewCart视图渲染后执行数据绑定 -->
+		<on-render>
+			<evaluate expression="productService.getProducts()" result="viewScope.products" />
+		</on-render>
+		<!-- on对应于界面_eventId,to表示跳转到哪个view，根据applicationContext中配置的直接映射到viewOrder.jsp 
+		/shopping.do?execution=e4s4&_eventId=submit-->
+		<transition on="submit" to="viewOrder" />
+		<transition on="addToCart" to="addProductToCart"/> 
+	</view-state>
+	
+	<subflow-state id="addProductToCart" subflow="addToCart">
+		<transition on="productAdded" to="viewCart" />
+	</subflow-state>
+	
+	<view-state id="viewOrder" view="viewOrder">
+		<transition on="confirm" to="orderConfirmed">
+		</transition>
+	</view-state>
+	
+	<view-state id="orderConfirmed" view="orderConfirmed">
+		<transition on="returnToIndex" to="returnToIndex">
+		</transition>
+	</view-state>
+
+	<!-- externalRedirect 用在 view 名字中，表示所指向的资源是在 flow 的外部, servletRelative 则表明所指向资源的路径起始部分与 
+		flow 所在 servlet 相同 -->
+	<end-state id="returnToIndex" view="externalRedirect:index">
+	</end-state>
+</flow>
