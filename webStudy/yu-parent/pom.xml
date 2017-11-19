@@ -244,7 +244,7 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>3.0.1</version>
-				<scope>provided</scope>
+				<!--<scope>provided</scope>-->
 			</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -255,25 +255,25 @@
 				<groupId>javax.servlet.jsp</groupId>
 				<artifactId>jsp-api</artifactId>
 				<version>2.2</version>
-				<scope>provided</scope>
+				<!--<scope>provided</scope>-->
 			</dependency>
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-catalina</artifactId>
 				<version>7.0.61</version>
-				<scope>provided</scope>
+				<!--<scope>provided</scope>-->
 			</dependency>
 			<dependency>
 				<groupId>tomcat</groupId>
 				<artifactId>jasper-compiler</artifactId>
 				<version>5.5.23</version>
-				<scope>provided</scope>
+				<!--<scope>provided</scope>-->
 			</dependency>
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-coyote</artifactId>
-				<version>7.0.61</version>
-				<scope>provided</scope>
+				<version>7.0.75</version>
+				<!--<scope>provided</scope>-->
 			</dependency>
 
 			<!-- mybatis相关jar -->
