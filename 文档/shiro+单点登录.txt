@@ -1,0 +1,23 @@
+http://localhost:8443/chapter15-client/
+
+问题 配置的ShiroFilterFactoryBean并没有doFilter方法  通过getObject()返回一个AbstractShiroFilter过滤器   getObject()有spring容器负责调用
+
+OncePerRequestFilter.doFilter(CASFilter)
+	request.setAttribute(alreadyFilteredAttributeName, Boolean.TRUE);  alreadyFilteredAttributeName=shiroFilter.FILTERED
+AbstractShiroFilter.doFilterInternal
+	ServletRequest request = prepareServletRequest(servletRequest, servletResponse, chain);=>wrapServletRequest(http)=>new ShiroHttpServletRequest(httpSessions=false,)
+	ServletResponse response = prepareServletResponse(request, servletResponse, chain);
+	subject = createSubject(request, response);
+	updateSessionLastAccessTime
+
+OncePerRequestFilter.doFilter(UserFilter)
+
+
+FilterChainManager DefaultFilterChainManager=>filters.put(name, filter); 通过该方法将ShiroFilterFactoryBean配置的filters注入到filterChainManager
+Filter  UserFilter.onAccessDenied
+
+
+
+输入http://localhost:8443/chapter15-client/ 
+=>DelegatingFilterProxy.doFilter=>invokeDelegate(delegateToUse, request, response, filterChain);//delegateToUse为ShiroFilterFactoryBean$SpringShiroFilter
+=>ShiroFilterFactoryBean$SpringShiroFilter.doFilter

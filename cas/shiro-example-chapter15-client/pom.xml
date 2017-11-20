@@ -97,11 +97,13 @@
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
 			<version>2.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
+			<scope>provided</scope>
 		</dependency>
 
 
@@ -152,6 +154,7 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-coyote</artifactId>
 			<version>7.0.75</version>
+			<scope>provided</scope>
 		</dependency>
 
 
