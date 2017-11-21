@@ -8,6 +8,12 @@
 	<name>shiro-example-chapter15-client</name>
 	<url>http://maven.apache.org</url>
 
+	<parent>
+		<groupId>com.yu</groupId>
+		<artifactId>basewebjar</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

@@ -9,5 +9,5 @@ import com.yu.study.dos.OrderDo;
 @Controller
 @RequestMapping("/orders")
 public class OrderController extends BaseController<OrderDo, OrderDo>{
-	
+
 }

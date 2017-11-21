@@ -1,4 +1,5 @@
 http://localhost:8443/chapter15-client/
+http://localhost:8443/chapter15-client/test
 
 问题 配置的ShiroFilterFactoryBean并没有doFilter方法  通过getObject()返回一个AbstractShiroFilter过滤器   getObject()有spring容器负责调用
 
@@ -21,3 +22,85 @@ Filter  UserFilter.onAccessDenied
 输入http://localhost:8443/chapter15-client/ 
 =>DelegatingFilterProxy.doFilter=>invokeDelegate(delegateToUse, request, response, filterChain);//delegateToUse为ShiroFilterFactoryBean$SpringShiroFilter
 =>ShiroFilterFactoryBean$SpringShiroFilter.doFilter
+
+subjectContext servletRequest,servletResponse,securityManager
+根据subjectContext取出sessionId,
+
+
+用户登录后做相关操作时第一个过滤器springShiroFilter(名称为shiroFilter,由配置中指定)过滤流程分析：
+1 通过设置request头shiroFilter.FILTERED=true来标记当前过滤器针对该请求已做过过滤处理
+2 调用doFilterInternal，做完所有内部操作
+	2.1 准备ServletRequest，根据servletRequest，servletResponse，chain准备ServletRequest，如果是HttpServletRequest(这里因为是web应用所以是httpServletRequest)，
+		对HttpServletRequest进行包装(将原始HttpServletRequest,servlet上下文(servlet容器的servletContext),是否httpSessionMode(意为使用servlet容器的session,默认为false，即使用本地的session),
+		这三个参数作为构造函数参数传入构造一个ShiroHttpServletRequest实例)。
+	2.2 准备ServletResponse，根据2.1构造的ShiroHttpServletRequest和servletResponse准备ServletResponse，如果是HttpServletResponse和ShiroHttpServletRequest类型(这里为真),
+		对HttpServletResponse进行包装(将原始HttpServletResponse,servlet上下文(servlet容器的servletContext),ShiroHttpServletRequest
+		这三个参数作为构造函数参数传入构造一个ShiroHttpServletResponse实例)。
+	2.3 根据准备好的ServletRequest,ServletResponse创建一个主题实例(subject)(调用WebSubject.Builder(getSecurityManager(), request, response).buildWebSubject();)
+		2.3.1 new WebSubject.Builder(getSecurityManager(), request, response) 利用securityManager,request,response创建一个构建者。WebSubject.Builder构造函数过程如下:
+			2.3.1.1 将securityManager注入到Builder中=>创建一个新的newSubjectContextInstance赋给subjectContext=>将securityManager注入到subjectContext中
+			2.3.1.2 将request注入到subjectContext中=>将response注入到subjectContext中
+		2.3.2 利用2.3.1中构建的Builder构建一个subject,将subjectContext参数传入委托给securityManager去创建一个subject对象(this.securityManager.createSubject(this.subjectContext))
+			securityManager创建subject过程如下:
+			2.3.2.1 复制subjectContext得到一个新的SubjectContext(将SubjectContext背后的backingMap包含的数据引用复制给新的subjectContext，属于浅拷贝)
+			2.3.2.2 确保subjectContext已经注入了securityManager，如果没有则将当前securityManager注入subjectContext(这里在2.3.1.1中已经注入过了)
+			2.3.2.3 根据subjectContext解析session,一般是基于sessionID来解析,解析流程如下:
+				2.3.2.3.1 通过subjectContext自己的resolveSession=>从自己的backingMap中查找KEY为DefaultSubjectContext.SESSION的session
+						=>如果没有找到，从自己的backingMap中查找KEY为DefaultSubjectContext.SUBJECT的subject=>如果找到已经存在的subject,则通过subject的getSession返回session成员变量
+				2.3.2.3.2 如果还是没找到,则通过解析subjectContext得到session,DefaultSecurityManager.resolveContextSession(SubjectContext)流程如下
+						=>根据subjectContext解析得到sessionKey,getSessionKey(SubjectContext context)流程如下:
+							2.3.2.3.2.1 context.getSessionId()=>从subjectContext的backingMap中查找KEY为DefaultSubjectContext.SESSION_ID的值,得到sessionId(这里返回null)
+							2.3.2.3.2.2 从subjectContext上下文中获取ServletRequest和ServletResponse
+							2.3.2.3.2.3 根据上面2步获得的sessionId(这里为null)和ServletRequest和ServletResponse构造一个WebSessionKey，并返回
+						=>如果sessionKey不为null(这里不为null,但sessionKey的sessionId为null)，通过SessionManager的getSession(SessionKey key)来获取session。(DefaultSecurityManager继承了SessionsSecurityManager)
+						=>SessionManager的getSession(SessionKey key)流程如下:
+							=>lookupSession(key)查找session
+								=>如果key为null,主动抛出空指针异常
+								=>doGetSession(key)
+									=>retrieveSession(key)
+										=>SessionsSecurityManager.getSessionId(key)=>getSessionId(request, response)
+											=>getReferencedSessionId(request, response)解析得到sessionId,其流程如下:
+													=>getSessionIdCookieValue(request, response)=>getSessionIdCookie().readValue(httpRequest, WebUtils.toHttp(response))
+													=>SimpleCookie.readValue(HttpServletRequest request, HttpServletResponse ignored)=>从servletRequest中获取名称为sid的cookie，
+													将这个cookie的值作为sessionId返回getSessionIdCookieValue方法。
+												=>sessionId不为空，设置ServletRequest的"ShiroHttpServletRequestREFERENCED_SESSION_ID_SOURCE"属性，值为"cookie",这两个均为字符串常量。
+												=>设置ServletRequest的"ShiroHttpServletRequest_REQUESTED_SESSION_ID"属性，值为获取到的sessionId
+												=>设置ServletRequest的"ShiroHttpServletRequest_REQUESTED_SESSION_ID_VALID"属性，值为true
+												=>将获取到的sessionId的作为getReferencedSessionId的结果返回
+									=>retrieveSessionFromDataSource(sessionId)得到session;
+										=>sessionDAO.readSession(sessionId)获取session
+											=>getCachedSession(sessionId)
+												=>getActiveSessionsCacheLazy()得到Cache<Serializable, Session> 简称cache
+													=>如果activeSessions不为null,直接返回activeSessions,如果为null,createActiveSessionsCache通过缓存管理器创建一个带名称的缓存(这里调用了EnCacheManager)
+												=>getCachedSession(sessionId, cache)：根据sessionId和session cache得到以缓存的session对象(简称为cached)。返回这个缓存的session对象。
+												=>如果返回的session为null,调用父类的readSession(sessionId)继续读取session。如果不为null,返回session
+									=>如果返回的session为null,抛出UnknownSessionException异常。
+								=>validate(s, key)。如果session不为空，校验获取到的缓存session，比如是否过期，是否无效等等。s为session,key为sessionKey
+									=> doValidate(session)
+										=>((ValidatingSession) session).validate();如果session是ValidatingSession类型(这里为Simple类型，继承自ValidatingSession)
+											=>isStopped() 检查是否已经停止。如果停止则抛出异常
+												=>getStopTimestamp() != null;如果停止时间片不为null,则表示是已经停止
+											=>(isTimedOut())检查是否超时
+												=>isExpired() 检查expired属性是否为true
+												=>如果是，直接返回。
+												=>如果不是.
+													=>long timeout = getTimeout()。获取timeout超时时间设置。
+													=>如果timeout>=1。
+														=>如果是,获取最近访问时间和当前时间比较，如果间隔大于timeout，返回true
+															=>如果不是，返回false。
+											=>如果是超时,调用expire();设置expired为true。抛出ExpiredSessionException异常。
+									=>没有抛异常，表示验证通过，否则捕获了异常(ExpiredSessionException,InvalidSessionException)	分别调用onExpiration和onInvalidation并将异常再次抛出。
+								=>没有抛异常表示验证通过，返回session
+												
+												
+								
+								
+								
+								
+							
+			
+3 通过移除request头shiroFilter.FILTERED标记
+
+
+	
+
