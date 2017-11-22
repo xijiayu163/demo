@@ -1,5 +1,11 @@
-http://localhost:8443/chapter15-client/
+http://192.168.1.4:8080/chapter15-client/
 http://localhost:8443/chapter15-client/test
+
+if (log.isInfoEnabled()) {
+    log.info("设置安全管理器");
+}
+
+http && ip.src_host==192.168.1.4 && ip.dst_host==192.168.1.4
 
 问题 配置的ShiroFilterFactoryBean并没有doFilter方法  通过getObject()返回一个AbstractShiroFilter过滤器   getObject()有spring容器负责调用
 

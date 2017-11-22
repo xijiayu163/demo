@@ -985,3 +985,5 @@ SERVER IP ADDRESS: 127.0.0.1
 2017-11-20 00:44:06,791 INFO [org.jasig.cas.util.AutowiringSchedulerFactoryBean] - Starting Quartz Scheduler now
 2017-11-21 00:11:12,389 INFO [org.jasig.cas.services.DefaultServicesManagerImpl] - Loaded 1 services.
 2017-11-21 00:11:14,999 INFO [org.jasig.cas.util.AutowiringSchedulerFactoryBean] - Starting Quartz Scheduler now
+2017-11-22 21:26:46,733 INFO [org.jasig.cas.services.DefaultServicesManagerImpl] - Loaded 1 services.
+2017-11-22 21:26:48,984 INFO [org.jasig.cas.util.AutowiringSchedulerFactoryBean] - Starting Quartz Scheduler now
