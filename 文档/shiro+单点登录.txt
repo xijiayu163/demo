@@ -1,5 +1,6 @@
 http://192.168.2.47:8080/chapter15-client/
-http://localhost:8443/chapter15-client/test
+http://192.168.1.4:8080/chapter15-client/
+,RolesAuthorization,HttpMethodPermission
 
 http && ip.src_host==192.168.1.4 && ip.dst_host==192.168.1.4
 
@@ -31,19 +32,6 @@ WebSessionKey 包含servletRequest，ServletResponse，sessionId
 
 
 也就是说每次请求都生成了一个Subject一个SubjectContext一个DelegatingSession，多次请求时只有sessionId是不变的.
-
-
-
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[63] 获取securityManager:org.apache.shiro.web.mgt.DefaultWebSecurityManager@ee8e52d
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[64] 获取Session:org.apache.shiro.session.mgt.DelegatingSession@6f119af2
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[65] 获取sessionEnabled:true
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[66] 获取principals:null
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[67] 获取authenticated:false
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[68] 获取host:192.168.2.47
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[69] 获取ServletRequest:org.apache.shiro.web.servlet.ShiroHttpServletRequest@75b0ed9f
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[70] 获取ServletResponse:org.apache.shiro.web.servlet.ShiroHttpServletResponse@3cad062
-[INFO]-[http-bio-8080-exec-5]-[CasSubjectFactory]-[DefaultWebSubjectFactory]-[createSubject]-[71] 根据这些数据构建一个WebDelegatingSubject
-
 
 
 	

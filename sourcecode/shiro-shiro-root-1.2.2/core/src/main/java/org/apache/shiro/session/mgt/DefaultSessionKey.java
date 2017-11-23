@@ -17,8 +17,6 @@ package org.apache.shiro.session.mgt;
 
 import java.io.Serializable;
 
-import groovy.transform.ToString;
-
 /**
  * Default implementation of the {@link SessionKey} interface, which allows setting and retrieval of a concrete
  * {@link #getSessionId() sessionId} that the {@code SessionManager} implementation can use to look up a

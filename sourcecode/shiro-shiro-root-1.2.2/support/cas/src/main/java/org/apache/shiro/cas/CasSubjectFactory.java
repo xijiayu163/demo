@@ -23,8 +23,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;
 import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 
-import groovy.util.logging.Log;
-
 /**
  * {@link org.apache.shiro.mgt.SubjectFactory Subject} implementation to be used in CAS-enabled applications.
  *

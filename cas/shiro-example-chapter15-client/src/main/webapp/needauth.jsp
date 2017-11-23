@@ -2,6 +2,6 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <html>
 <body>
-	欢迎您!!!!
+	必须鉴权页面,欢迎您!!!!
 </body>
 </html>
