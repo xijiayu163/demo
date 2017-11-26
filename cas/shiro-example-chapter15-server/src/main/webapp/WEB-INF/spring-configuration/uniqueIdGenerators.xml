@@ -44,10 +44,17 @@
     <bean id="proxy20TicketUniqueIdGenerator" class="org.jasig.cas.util.DefaultUniqueTicketIdGenerator"
         c:maxLength="20" c:suffix="${host.name}" />
 	 
+	<bean id="samlServiceTicketUniqueIdGenerator" class="org.jasig.cas.support.saml.util.SamlCompliantUniqueTicketIdGenerator">
+  		<constructor-arg index="0" value="https://192.168.1.4:8080/chapter15-server" />
+	</bean>
+	 
 	<util:map id="uniqueIdGeneratorsMap">
 		<entry
 			key="org.jasig.cas.authentication.principal.SimpleWebApplicationServiceImpl"
 			value-ref="serviceTicketUniqueIdGenerator" />
+		<entry
+		    key="org.jasig.cas.support.saml.authentication.principal.SamlService"
+		    value-ref="samlServiceTicketUniqueIdGenerator" />
 	</util:map>
 
 </beans>

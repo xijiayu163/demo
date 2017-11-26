@@ -27,8 +27,9 @@
         <property name="authenticationCacheName" value="authenticationCache"/>
         <property name="authorizationCachingEnabled" value="true"/>
         <property name="authorizationCacheName" value="authorizationCache"/>
-        <property name="casServerUrlPrefix" value="http://192.168.1.4:8443/chapter15-server"/>
+        <property name="casServerUrlPrefix" value="http://192.168.1.4:8080/chapter15-server"/>
         <property name="casService" value="http://192.168.1.4:8080/chapter15-client/cas"/>
+        <property name="validationProtocol" value="saml"/>
     </bean>
 
     <!--<bean id="casRealm" class="org.apache.shiro.cas.CasRealm">-->
@@ -41,7 +42,7 @@
         <!--<property name="defaultPermissions" value="user:create,user:update"/>-->
         <!--<property name="roleAttributeNames" value="roles"/>-->
         <!--<property name="permissionAttributeNames" value="permissions"/>-->
-        <!--<property name="casServerUrlPrefix" value="http://192.168.1.4:8443/chapter15-server"/>-->
+        <!--<property name="casServerUrlPrefix" value="http://192.168.1.4:8080/chapter15-server"/>-->
         <!--<property name="casService" value="http://192.168.1.4:8080/chapter15-client/cas"/>-->
     <!--</bean>-->
 
@@ -116,25 +117,29 @@
     
     <bean id="myPermissionsAuthorizationFilter" class="com.github.zhangkaitao.shiro.chapter15.filters.MyPermissionsAuthorizationFilter">
         <property name="unauthorizedUrl" value="/noauth.jsp"/>
+        <property name="loginWarnUrl" value="/loginwarn.jsp"/>
     </bean>
+    
+    <bean id="casLogoutFilter" class="com.github.zhangkaitao.shiro.chapter15.filters.CasLogoutFilter" />
 
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="http://192.168.1.4:8443/chapter15-server/login?service=http://192.168.1.4:8080/chapter15-client/cas"/>
+        <property name="loginUrl" value="http://192.168.1.4:8080/chapter15-server/login?service=http://192.168.1.4:8080/chapter15-client/cas"/>
         <property name="successUrl" value="/"/>
         <property name="filters">
             <util:map>
                 <entry key="cas" value-ref="casFilter"/>
                 <entry key="myperms" value-ref="myPermissionsAuthorizationFilter"/>
+                <entry key="caslogout" value-ref="casLogoutFilter"/>
             </util:map>
         </property>
         <property name="filterChainDefinitions">
             <value>
                 /casFailure.jsp = anon
                 /cas = cas
-                /logout = logout
-                /** = myperms   <!--user-->
+                /logout = caslogout
+                 /** = myperms 
             </value>
         </property>
     </bean>

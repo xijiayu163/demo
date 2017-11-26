@@ -36,4 +36,11 @@
  	<util:list id="argumentExtractors">
 		<ref bean="casArgumentExtractor" />
  	</util:list>
+ 	
+ 	<bean id="samlArgumentExtractor" class="org.jasig.cas.support.saml.web.support.SamlArgumentExtractor" />
+
+	<util:list id="argumentExtractors">
+	  <ref bean="casArgumentExtractor" />
+	  <ref bean="samlArgumentExtractor" />
+	</util:list>
 </beans>

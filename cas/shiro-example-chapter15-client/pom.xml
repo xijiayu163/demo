@@ -162,7 +162,17 @@
 			<version>7.0.75</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+            <!-- for Optional SAML ticket validation: -->
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <!-- for Optional SAML ticket validation: -->
+            <groupId>org.apache.santuario</groupId>
+            <artifactId>xmlsec</artifactId>
+        </dependency>
 
 	</dependencies>
 

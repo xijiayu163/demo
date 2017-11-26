@@ -34,5 +34,7 @@
 		p:cookieSecure="false"
 		p:cookieMaxAge="-1"
 		p:cookieName="CASTGC"
+		p:rememberMeMaxAge="7200"
 		p:cookiePath="/cas" />
+		
 </beans>

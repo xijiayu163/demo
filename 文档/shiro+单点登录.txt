@@ -1,14 +1,15 @@
 http://192.168.2.47:8080/chapter15-client/
 http://192.168.1.4:8080/chapter15-client/
+http://192.168.1.4:8080/chapter15-client/needauth.jsp
 ,RolesAuthorization,HttpMethodPermission
+http://192.168.1.4:8080/chapter15-server/
 
 http && ip.src_host==192.168.1.4 && ip.dst_host==192.168.1.4
 
 主线，数据流:构建+改变 
 
 
-从context中这么解析principals
-Subject是如何保存的，保存了哪些数据
+DefaultFilter 
 
 
 
@@ -33,6 +34,100 @@ WebSessionKey 包含servletRequest，ServletResponse，sessionId
 
 也就是说每次请求都生成了一个Subject一个SubjectContext一个DelegatingSession，多次请求时只有sessionId是不变的.
 
+ServiceValidateController   handleRequestInternal
+AuthenticationManager
+RememberMeAuthenticationMetaDataPopulator
+PolicyBasedAuthenticationManager
+casServiceValidationSuccess.jsp
+
+<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+	<cas:authenticationSuccess>
+		<cas:user>zhang</cas:user>
+        
+        
+	</cas:authenticationSuccess>
+</cas:serviceResponse>
+
+CentralAuthenticationServiceImpl=>AcceptUsersAuthenticationHandler
+
+longTermAuthenticationRequestTokenUsed
+AuthenticationViaFormAction.submit
+Saml10SuccessResponseView
+
+GET /chapter15-client/cas?ticket=ST-29-J3TfwnwAxci6tSDIjp4h-cas01.example.org HTTP/1.1\r\n
+GET /chapter15-server/serviceValidate?ticket=ST-29-J3TfwnwAxci6tSDIjp4h-cas01.example.org&service=http%3A%2F%2F192.168.1.4%3A8080%2Fchapter15-client%2Fcas HTTP/1.1\r\n
+
+
+注意；ShiroFilterFactoryBean的filterChainDefinitions同时配置多个过滤器，会找到第一个匹配的即返回并添加到过滤器链上，所以配置顺序很重要
+例如：/casFailure.jsp = anon
+                /cas = cas
+                /logout = caslogout
+                 /** = myperms 
+/**一定要配置在最下面
+
+CAS server 入口 login-webflow.xml=>InitialFlowSetupAction.doExecute=>TicketGrantingTicketCheckAction.checkValidity
+AuthenticationViaFormAction
+
+单点登录原理:
+1 未登录的情况下，所有请求=>触发MyPermissionsAuthorizationFilter.isAccessAllowed
+=>获取subject
+=>判断是否有权限访问
+=>hasPrincipals
+	&&securityManager.isPermitted该流程为:
+		=>ModularRealmAuthorizer.isPermitted=>((Authorizer) realm).isPermitted=>getAuthorizationInfo(principals)
+		=>从缓存中读=>未读到，调用myCasRealm.doGetAuthorizationInfo
+=>如果isAccessAllowed返回false,表示不允许访问
+=>继承自的AuthorizationFilter判断是否有principals，如果没有保存请求并重定向到登录界面(ef:GET /chapter15-server/login?service=http://192.168.1.4:8080/chapter15-client/cas)，如果有principals，则表示授权未通过，跳到未授权页面
+
+2 用户在登录界面，输入用户名密码，点提交
+=>2.1CAS Server验证，如果验证通过，生成ST,设置COOKIE(CAS server域)，TGC=ST-xxxxxxxxxx，如果验证不通过依然还是登录界面。
+=>2.2重定向到CAS client,携带ST( ef:GET /chapter15-client/cas?ticket=ST-29-J3TfwnwAxci6tSDIjp4h-cas01.example.org)
+=>2.3满足casFilter过滤(针对cas路径进行捕获),走父类模版流程，此时因为没有principals还是未登录状态,调用casFilter.onAccessDenied
+=>2.4casFilter.onAccessDenied=>executeLogin=>创建TOKEN=>获取subject=>subject.login(token)
+=>2.5securityManager.login=>authenticate(token)=>this.authenticator.authenticate(token);=>ModularRealmAuthorizer.doAuthenticate(token);
+=>2.6realm.getAuthenticationInfo=>从缓存中读是否有鉴权信息=>如果没有doGetAuthenticationInfo(token)=>casRealm=>doGetAuthenticationInfo(token)
+=>2.7向CASserver 发起验证请求,ef(GET /chapter15-server/serviceValidate?ticket=ST-29-J3TfwnwAxci6tSDIjp4h-cas01.example.org&service=http%3A%2F%2F192.168.1.4%3A8080%2Fchapter15-client%2Fcas)
+=>2.7Cas server验证，返回XML，如果成功，响应片段形如:
+	<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+	<cas:authenticationSuccess>
+		<cas:user>zhang</cas:user>
+	</cas:authenticationSuccess>
+</cas:serviceResponse>
+=>2.9CAS Realm分析响应，判断CASserver是否验证通过，如果不通过，重定向到警告页面，CAS server的警告作为内容体在重定向的告警页面显示。
+	如果通过,从executeLogin返回(true)
+=>2.10根据token, info构建subject(构建完成后会缓存上下文)=>onLoginSuccess=>从缓存中读取service，重定向到该service(WebUtils.redirectToSavedRequest),并终止过滤器链。
+=>2.11触发MyPermissionsAuthorizationFilter.isAccessAllowed
+=>2.12MyPermissionsAuthorizationFilter.isAccessAllowed
+=>2.13获取subject,判断是否有权限访问=>hasPrincipals&&securityManager.isPermitted,已经有身份信息了，直接走授权流程。同1中的授权流程
+=>2.14如果没有权限访问，重定向到未授权页面,如果有权限，放行。
+
+3 登出:
+被CasLogoutFilter匹配上=>preHandle 获取配置中的登出url向CAS server发出登出请求。=>CAS SERVER 使TGC失效=>获取subject,调用subject.logout
+=>重定向到配置中的登录界面。
+
+4 用户关闭浏览器
+=>CAS server清理session,使TGC失效,shiro client清理session。
+
+
+5 记住我功能：用户登陆后，访问完网页，关闭了浏览器，下次再打开浏览器，可以直接访问。
+5.1 CAS 登录页面，勾选记住我，提交=>cas server验证通过，设置COOKIE(CAS server域)，TGC=ST-xxxxxxxxxx，并将TGC时效延长 其他流程同上
+5.2 用户关闭浏览器，CAS server清理session,但不使TGC失效，shiro client清理session。
+5.3 用户再次打开浏览器访问页面=>shiro发现没有身份=>保存request=>重定向CAS Server login(ef:GET /chapter15-server/login?service=http://192.168.1.4:8080/chapter15-client/cas)
+	=>浏览器携带TGC提交login get请求=>CAS server发现有TGC，生成ST，携带ST重定向到cas client( ef:GET /chapter15-client/cas?ticket=ST-29-J3TfwnwAxci6tSDIjp4h-cas01.example.org)
+	=>cas Filter匹配请求过滤，经过2中的流程使用CasRealm 携带ST对CAS server发起验证请求
+	=>cas Server进行对ST进行验证，发现是被记住的，验证通过，在响应的XML文档中添加被记住的特性。
+	=>casRealm接受到响应，分析响应，=>发现时被记住的，设置CASToken的RememberMe属性为true
+	=>走流程2.10,使用casSubjectFactory创建subject,发现casToken是被记住的，设置创建的subject是被记住的
+	=>casFilter 鉴权通过放行，重定向被保存的Request指定的页面
+5.4 浏览器重定向=>被MyPermissionsAuthorizationFilter匹配捕获=>MyPermissionsAuthorizationFilter.isAccessAllowed
+	=>同获取subject,此时subject是被记住的,判断是否有权限访问=>hasPrincipals&&securityManager.isPermitted,
+	=>已经有身份信息了，直接走授权流程。同1中的授权流程
+	=>ModularRealmAuthorizer.isPermitted=>((Authorizer) realm).isPermitted=>getAuthorizationInfo(principals)
+	=>从缓存中读=>未读到，调用myCasRealm.doGetAuthorizationInfo，判断subject是否记住，过滤掉敏感权限。
+	=>如果当前访问的是敏感资源=>跳到登录页面。
+	
+
 
 	
+
 

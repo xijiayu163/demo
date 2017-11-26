@@ -53,6 +53,7 @@
       <util:list>
         <value>${cas.viewResolver.basename}</value>
         <value>protocol_views</value>
+        <value>saml_views</value>
       </util:list>
     </property>
   </bean>
@@ -79,6 +80,7 @@
     <property name="mappings">
       <util:properties>
         <prop key="/serviceValidate">serviceValidateController</prop>
+        <prop key="/samlValidate">samlValidateController</prop>
         <prop key="/proxyValidate">proxyValidateController</prop>
         
         <prop key="/p3/serviceValidate">v3ServiceValidateController</prop>
@@ -190,6 +192,14 @@
 
   <bean id="serviceValidateController" parent="abstractValidateController"
         p:validationSpecificationClass="org.jasig.cas.validation.Cas20WithoutProxyingValidationSpecification"/>
+        
+  <bean id="samlValidateController" class="org.jasig.cas.web.ServiceValidateController"
+		  p:validationSpecificationClass="org.jasig.cas.validation.Cas20WithoutProxyingValidationSpecification"
+		  p:centralAuthenticationService-ref="centralAuthenticationService"
+		  p:proxyHandler-ref="proxy20Handler"
+		  p:argumentExtractor-ref="samlArgumentExtractor"
+		  p:successView="casSamlServiceSuccessView"
+		  p:failureView="casSamlServiceFailureView"/>
 
   <!--  CAS 3 Protocol service/proxy validation with attributes -->
   <bean id="v3AbstractValidateController" parent="abstractValidateController" abstract="true"
