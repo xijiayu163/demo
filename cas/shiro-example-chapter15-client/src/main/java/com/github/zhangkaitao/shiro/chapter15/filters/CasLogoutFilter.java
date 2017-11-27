@@ -16,13 +16,13 @@ public class CasLogoutFilter extends LogoutFilter{
         try {
             subject.logout();
         } catch (SessionException ise) {
-            log.debug("Encountered session exception during logout.  This can generally safely be ignored.", ise);
+            //log.debug("Encountered session exception during logout.  This can generally safely be ignored.", ise);
         }
         issueRedirect(request, response, redirectUrl);
         return false;
     }
     
     private String getLogoutUrl(){
-    	return "http://192.168.1.4:8080/chapter15-server/logout";
+    	return "http://192.168.2.47:8080/chapter15-server/logout";
     }
 }
