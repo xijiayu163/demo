@@ -3,3 +3,4 @@ Hbase 列 nosql
 mongdo的使用场景  
 http://blog.csdn.net/adparking/article/details/38728797
 
+百千金融 丰巢 阿里 平安 
