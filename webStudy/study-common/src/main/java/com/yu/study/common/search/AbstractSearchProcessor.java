@@ -1,11 +1,13 @@
 package com.yu.study.common.search;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.beanutils.converters.BigDecimalConverter;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -145,7 +147,10 @@ public abstract class AbstractSearchProcessor implements SearchProcessor{
 			return Boolean.parseBoolean(String.valueOf(value));
 		}else if(clazz.equals(Double.class)){
 			return Double.parseDouble(String.valueOf(value));
-		}else {
+		}else if(clazz.equals(BigDecimal.class)){
+			return new BigDecimal((String)value);
+		}
+		else {
 			return (Serializable) clazz.cast(value);
 		}
 	}

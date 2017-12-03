@@ -52,7 +52,7 @@ public class OrderBoServiceImpl extends BaseBoServiceImpl<OrderBo> implements Or
 		strategy.setLoadOrderAttachInfoFlag(true);
 		strategy.setLoadOrderGoodsFlag(true);
 		strategy.setLoadOrderLogFlag(true);
-		strategy.setLoadOrderPolicyFlag(true);
+		strategy.setLoadOrderPolicyFlag(false);
 		strategy.setLoadOrderRefundFlag(true);
 		
 		return strategy;

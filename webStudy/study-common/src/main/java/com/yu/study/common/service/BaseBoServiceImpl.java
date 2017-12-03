@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -227,6 +228,7 @@ public abstract class BaseBoServiceImpl<T> extends AbstractBaseServiceImpl<T> im
 	
 	@Override
 	public String create(Object entity) {
+		Assert.notNull(entity);
 		List<BaseService<?>> services = getServices(getServicesOfLoadAllStrategy());
 		
 		//校验对象组合的正确性，不能包含同一个xxxDaoImpl多次,防止重复插入
@@ -244,8 +246,11 @@ public abstract class BaseBoServiceImpl<T> extends AbstractBaseServiceImpl<T> im
 	 * @return
 	 */
 	public String doCreate(Object entity,String foreignKey,String foreignKeyValue){
-		List<BaseService<?>> services = getServices(getServicesOfLoadAllStrategy());
+		if(entity==null){
+			return null;
+		}
 		
+		List<BaseService<?>> services = getServices(getServicesOfLoadAllStrategy());
 		try{
 			String fisrtIdentifierName = null;
 			String firstGeneratePrimaryKey = null;
@@ -276,7 +281,7 @@ public abstract class BaseBoServiceImpl<T> extends AbstractBaseServiceImpl<T> im
 							for(Object obj:list){
 								service.doCreate(obj, fisrtIdentifierName, firstGeneratePrimaryKey);
 							}
-						}else{
+						}else if(object!=null){
 							service.doCreate(object, fisrtIdentifierName, firstGeneratePrimaryKey);
 						}
 					}
@@ -291,6 +296,7 @@ public abstract class BaseBoServiceImpl<T> extends AbstractBaseServiceImpl<T> im
 
 	@Override
 	public String update(Object entity) {
+		Assert.notNull(entity);
 		LoadStrategy strategy = getServicesOfLoadAllStrategy();
 		return update(entity,strategy);
 	}
@@ -328,7 +334,7 @@ public abstract class BaseBoServiceImpl<T> extends AbstractBaseServiceImpl<T> im
 							for(Object obj:list){
 								service.update(obj);
 							}
-						}else{
+						}else if(object!=null){
 							service.update(object);
 						}
 					}
